@@ -4,7 +4,8 @@ class CreateItems < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :description
       t.string :image_url
-      t.string :last_seen_location
+      t.string :last_location
+      t.datetime :last_date
       t.boolean :lost_status
       t.boolean :found_status
       t.integer :user_id
