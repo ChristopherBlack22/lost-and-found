@@ -1,4 +1,21 @@
 class ItemSerializer
-  include FastJsonapi::ObjectSerializer
-  attributes :name, :description, :image_url, :last_location, :last_date, :lost_status, :found_status, :user, :comments
+  def initialize(item_object)
+    @item = item_object
+  end 
+
+  def to_serialized_json
+    options = {
+      include: {
+        user: {
+          only: [:id, :name]
+        },
+        comments: {
+          except: [:updated_at]
+        }
+      },
+      except: [:created_at, :updated_at]
+    }
+    @item.to_json(options)
+  end
+
 end

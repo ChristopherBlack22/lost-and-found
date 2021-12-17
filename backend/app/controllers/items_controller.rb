@@ -1,10 +1,9 @@
 class ItemsController < ApplicationController
     def index
         items = Item.all
-        #
-        render json: ItemSerializer.new(items)#, options)
+        render json: ItemSerializer.new(items).to_serialized_json
     end 
-    #DO I NEED TO USE OPTIONS TO BE MORE SELECTIVE WITH JSON DATA BUT HAVE TO DEAL WITH INCREASED NESTING?
+
 
     def show
         item = Item.find_by(id: params[:id])
