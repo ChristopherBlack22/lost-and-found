@@ -6,9 +6,6 @@ class ItemSerializer
   def to_serialized_json
     options = {
       include: {
-        user: {
-          only: [:id, :name]
-        },
         comments: {
           except: [:updated_at]
         }

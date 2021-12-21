@@ -13,29 +13,22 @@
 ActiveRecord::Schema.define(version: 2021_12_15_230841) do
 
   create_table "comments", force: :cascade do |t|
+    t.string "commenters_name"
     t.string "content"
-    t.integer "user_id"
     t.integer "item_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "name"
+    t.string "item_name"
     t.string "description"
     t.string "image_url"
-    t.string "last_location"
-    t.datetime "last_date"
+    t.string "last_known_location"
+    t.datetime "last_seen_date"
     t.boolean "lost_status"
     t.boolean "found_status"
-    t.integer "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
+    t.string "posters_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -54,12 +54,15 @@ function renderNewItemForm() {
         <input type="radio" id="found" name="status">
         <label for="found">Found</label>
         <br><br>
-        <label for="last-location">Last known location</label> 
+        <label for="last-known-location">Last known location</label> 
         <input type="text" id="last-location" name="last-location"><br><br>
-        <label for="last-date">Date</label> 
+        <label for="last-seen-date">Date</label> 
         <input type="datetime-local" id="last-date" name="last-date">
         <br><br>
-        <input type="submit" id="item-form-submit" value="Report it!">
+        <label for="posters-name">Reported by</label>
+        <input type="text" id="posters-name" name="posters-name">
+        <br><br>
+        <input type="submit" id="item-form-submit" value="Post Report">
     `;
     formContainer.appendChild(itemForm);
     itemForm.addEventListener("submit", function(event) {
@@ -74,7 +77,22 @@ function handleItemFormSubmit(event) {
     const imageUrl = document.querySelector("#item-form #image-url").value;
     const lostStatus = document.querySelector("#item-form #lost").checked;
     const foundStatus = document.querySelector("#item-form #found").checked;
-    const lastLocation = document.querySelector("#item-form #last-location").value;
-    const lastDate = document.querySelector("#item-form #last-date").value;
-    fetch("http://localhost:3000/items");
+    const lastKnownLocation = document.querySelector("#item-form #last-known-location").value;
+    const lastSeenDate = document.querySelector("#item-form #last-seen-date").value;
+    const postersName = document.querySelector("#item-form #posters-name").value;
+    const formData = {item_name: itemName, description: description, image_url: imageUrl, lost_status: lostStatus, found_status: foundStatus, last_know_location: lastKnownLocation, last_seen_date: lastSeenDate, posters_name: postersName};
+    postNewItem(formData);    
+}
+
+function postNewItem(formData) {
+    fetch("http://localhost:3000/items", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(jsonItems => renderItems(jsonItems))
 }
