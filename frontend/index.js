@@ -55,9 +55,9 @@ function renderNewItemForm() {
         <label for="found">Found</label>
         <br><br>
         <label for="last-known-location">Last known location</label> 
-        <input type="text" id="last-location" name="last-location"><br><br>
+        <input type="text" id="last-known-location" name="last-known-location"><br><br>
         <label for="last-seen-date">Date</label> 
-        <input type="datetime-local" id="last-date" name="last-date">
+        <input type="datetime-local" id="last-seen-date" name="last-seen-date">
         <br><br>
         <label for="posters-name">Reported by</label>
         <input type="text" id="posters-name" name="posters-name">
@@ -72,7 +72,7 @@ function renderNewItemForm() {
 
 function handleItemFormSubmit(event) {
     event.preventDefault();
-    const name = document.querySelector("#item-form #item-name").value;
+    const itemName = document.querySelector("#item-form #item-name").value;
     const description = document.querySelector("#item-form #description").value;
     const imageUrl = document.querySelector("#item-form #image-url").value;
     const lostStatus = document.querySelector("#item-form #lost").checked;
