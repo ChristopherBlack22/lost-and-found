@@ -20,7 +20,7 @@ function renderItems(jsonItems) {
         itemCard.className = "item";
         itemCard.innerHTML = `
             <img src=${item.image_url} height="200" width="200">
-            <h2>${item.name}<h2>
+            <h2>${item.item_name}<h2>
         `;
         if (item.lost_status === true) {
             let status = document.createElement("h3");
