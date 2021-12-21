@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    getItems();
-    const lostItemContainer = document.getElementById("lost-item-container");
-    const foundItemContainer = document.getElementById("found-item-container");
+    getItems("http://localhost:3000/items");
     const newItemFormHeader = document.getElementById("new-item-form-header");
     newItemFormHeader.addEventListener("click", function() {
         renderNewItemForm()
@@ -9,14 +7,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function getItems() {
-    fetch("http://localhost:3000/items")
+function getItems(targetUrl) {
+    fetch(targetUrl)
     .then(response => response.json())
     .then(jsonItems => renderItems(jsonItems))
 }
 
+
+// function getItems() {
+//     fetch("http://localhost:3000/items")
+//     .then(response => response.json())
+//     .then(jsonItems => renderItems(jsonItems))
+// }
+
 function renderItems(jsonItems) {
     for(const item of jsonItems) {
+        const lostItemContainer = document.getElementById("lost-item-container");
+        const foundItemContainer = document.getElementById("found-item-container");
         let itemCard = document.createElement("div");
         itemCard.className = "item";
         itemCard.innerHTML = `
