@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     getItems();
-    const formTitle = document.getElementById("form-title");
-    formTitle.addEventListener("click", function() {
+    const lostItemContainer = document.getElementById("lost-item-container");
+    const foundItemContainer = document.getElementById("found-item-container");
+    const newItemFormHeader = document.getElementById("new-item-form-header");
+    newItemFormHeader.addEventListener("click", function() {
         renderNewItemForm()
     })
 });
@@ -14,7 +16,6 @@ function getItems() {
 }
 
 function renderItems(jsonItems) {
-    const itemContainer = document.getElementById("item-container");
     for(const item of jsonItems) {
         let itemCard = document.createElement("div");
         itemCard.className = "item";
@@ -25,13 +26,15 @@ function renderItems(jsonItems) {
         if (item.lost_status === true) {
             let status = document.createElement("h3");
             status.innerHTML = "LOST!";
-            itemCard.appendChild(status)
+            itemCard.appendChild(status);
+            lostItemContainer.appendChild(itemCard)
         } else if (item.found_status === true) {
             let status = document.createElement("h3");
             status.innerHTML = "FOUND!";
-            itemCard.appendChild(status)
+            itemCard.appendChild(status);
+            foundItemContainer.appendChild(itemCard)
         }
-        itemContainer.appendChild(itemCard)
+        // addEventListener on each itemCard so that onmouseenter or onmouseover you are taken to the show page
     }
 }
 
