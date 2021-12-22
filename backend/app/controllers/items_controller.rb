@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
 
     # def show
     #     item = Item.find_by(id: params[:id])
-    #     render json: item
+    #     render json: ItemSerializer.new(item).to_serialized_json
     # end
 
     def create

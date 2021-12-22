@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(16, 155, 155);
+}
+
+#title {
+    font-family: "Courier New", Courier, monospace;
+    text-shadow: 3.5px 3.5px rgb(80, 80, 80);
+    font-size: 60px;
+} 
+
+#title #lost {
+    color: rgb(255, 0, 0);
+    font-size: 75px;
+} 
+
+#title #found {
+    color: rgb(16, 245, 8);
+    font-size: 75px;
+} 
+
+.hidden {
+    visibility: hidden;
+}

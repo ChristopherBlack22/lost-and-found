@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    getItems("http://localhost:3000/items");
+    fetchItems("http://localhost:3000/items", renderItems);
     const newItemFormHeader = document.getElementById("new-item-form-header");
     newItemFormHeader.addEventListener("click", function() {
         renderNewItemForm()
@@ -7,19 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function getItems(targetUrl) {
+
+function fetchItems(targetUrl, callback) {
     fetch(targetUrl)
     .then(response => response.json())
-    .then(jsonItems => renderItems(jsonItems))
+    .then(json => callback(json))
 }
+//add catch error
 
 
-// function getItems() {
-//     fetch("http://localhost:3000/items")
-//     .then(response => response.json())
-//     .then(jsonItems => renderItems(jsonItems))
-// }
-
+//DO I NEED TO ADD AN ID FOR EACH ITEM?
 function renderItems(jsonItems) {
     for(const item of jsonItems) {
         const lostItemContainer = document.getElementById("lost-item-container");
@@ -28,7 +25,7 @@ function renderItems(jsonItems) {
         itemCard.className = "item";
         itemCard.innerHTML = `
             <img src=${item.image_url} height="200" width="200">
-            <h2>${item.item_name}<h2>
+            <h2>${item.item_name}</h2>
         `;
         if (item.lost_status === true) {
             let status = document.createElement("h3");
@@ -41,9 +38,37 @@ function renderItems(jsonItems) {
             itemCard.appendChild(status);
             foundItemContainer.appendChild(itemCard)
         }
-        // addEventListener on each itemCard so that onmouseenter or onmouseover you are taken to the show page
+
+        renderComments(itemCard, item.comments)
+        itemCard.addEventListener("mouseenter", function() {
+            console.log(`You have entered ${item.item_name} - ${item.id}`);
+            //fetchItems(`http://localhost:3000/items/${item.id}`, renderItemShow) - CAN I JUST USE THE DATA I HAVE ALREADY FETCHED?
+        })
     }
 }
+
+
+function renderComments(itemCard, commentsArray) {
+    let commentContainer = document.createElement("div");
+    commentContainer.classList.add("comments-container", "hidden");
+    for (comment of commentsArray) {
+        const commenterAndDate = document.createElement("p");
+        commenterAndDate.innerHTML = `${comment.commenters_name} <em>at ${readableDateTime(comment.created_at)}</em>`;
+        console.log(comment.created_at);
+        const content = document.createElement("p");
+        content.innerHTML = comment.content;
+        itemCard.append(commenterAndDate, content);
+    }
+}
+
+function readableDateTime(dateTime) {
+    const dateTimeArray = dateTime.split("T");
+    const formattedDate = dateTimeArray[0].split("-").reverse().join("/");
+    const formattedTime = dateTimeArray[1].slice(0,5);
+    const formattedDateTime = `${formattedTime} on ${formattedDate}`;
+    return formattedDateTime;
+}
+
 
 
 
@@ -76,11 +101,11 @@ function renderNewItemForm() {
     `;
     formContainer.appendChild(itemForm);
     itemForm.addEventListener("submit", function(event) {
-        handleItemFormSubmit(event)     
+        handleNewItemFormSubmit(event)     
     })
 }
 
-function handleItemFormSubmit(event) {
+function handleNewItemFormSubmit(event) {
     event.preventDefault();
     const itemName = document.querySelector("#item-form #item-name").value;
     const description = document.querySelector("#item-form #description").value;
