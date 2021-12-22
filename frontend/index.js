@@ -22,7 +22,7 @@ function renderItems(jsonItems) {
         const lostItemContainer = document.getElementById("lost-item-container");
         const foundItemContainer = document.getElementById("found-item-container");
         let itemCard = document.createElement("div");
-        itemCard.className = "item";
+        itemCard.classList.add("item", "comments-hidden");
         itemCard.innerHTML = `
             <img src=${item.image_url} height="300" width="300">
             <h2>${item.item_name}</h2>
@@ -43,10 +43,14 @@ function renderItems(jsonItems) {
         itemCard.addEventListener("mouseenter", function() {
             const commentsContainer = itemCard.querySelector(".comments-container");
             commentsContainer.classList.remove("hidden");
+            itemCard.classList.remove("comments-hidden")
+            itemCard.classList.add("comments-showing")
         })
         itemCard.addEventListener("mouseleave", function() {
             const commentsContainer = itemCard.querySelector(".comments-container");
             commentsContainer.classList.add("hidden");
+            itemCard.classList.remove("comments-showing")
+            itemCard.classList.add("comments-hidden")
         })
     }
 }
@@ -59,7 +63,6 @@ function renderComments(itemCard, commentsArray) {
     for (comment of commentsArray) {
         const commenterAndDate = document.createElement("p");
         commenterAndDate.innerHTML = `${comment.commenters_name} <em>at ${readableDateTime(comment.created_at)}</em>`;
-        console.log(comment.created_at);
         const content = document.createElement("p");
         content.innerHTML = comment.content;
         commentsContainer.append(commenterAndDate, content);
@@ -106,7 +109,8 @@ function renderNewItemForm() {
     `;
     formContainer.appendChild(itemForm);
     itemForm.addEventListener("submit", function(event) {
-        handleNewItemFormSubmit(event)     
+        handleNewItemFormSubmit(event);
+        formContainer.removeChild(itemForm)   
     })
 }
 

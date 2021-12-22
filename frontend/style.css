@@ -51,12 +51,24 @@ body {
     transform: rotate(-15deg);
 }
 
-#lost-item-container .item {
+#lost-item-container .item.comments-hidden {
     border: 3px solid rgb(255, 0, 0);
     margin: 50px 50px 50px 50px;
     width: 350px;
     height: 360px;
 }
+
+#lost-item-container .item.comments-showing {
+    border: 6px solid rgb(255, 0, 0);
+    margin: 50px 50px 50px 50px;
+    width: 350px;
+}
+
+
+
+
+
+
 
 #found-item-container {
     background-color: rgb(255, 255, 255);
@@ -64,7 +76,7 @@ body {
     margin: 50px 200px 50px 50px;
     position: relative;
     left: 700px;
-    top: -2500px;
+    top: -500px;
     border: 3px solid rgb(16, 245, 8);
 }
 

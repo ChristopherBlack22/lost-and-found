@@ -12,7 +12,7 @@ Comment.create(content: "Definitely my boots. I wondered where they had gone. I 
 Comment.create(content: "Sorry. Just remembered my boots are black, still worth checking though.", commenters_name: "Mouse", item_id: 1)
 Comment.create(content: "Found a very similar wallet one day later under a car parked by the canal. Message me to confirm it is yours.", commenters_name: "Tank", item_id: 2)
 Comment.create(content: "I am missing a key. Does it have any writing on it in an ancient lanuage?", commenters_name: "Cypher", item_id: 3)
-Comment.create(content: "No, but there is a strange symbol on it.", commenters_name: "Trintiy", item_id: 3)
+Comment.create(content: "No, but there is a strange symbol on it.", commenters_name: "Trinity", item_id: 3)
 Comment.create(content: "Ok. Not mine. Thanks.", commenters_name: "Cypher", item_id: 3)
 Comment.create(content: "I found some sunglassess in the same location. They have small diamonds on the bridge. Is that them?", commenters_name: "Dozer", item_id: 4)
 Comment.create(content: "Clearly not!!!", commenters_name: "Neo", item_id: 4)
