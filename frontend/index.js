@@ -24,7 +24,7 @@ function renderItems(jsonItems) {
         let itemCard = document.createElement("div");
         itemCard.className = "item";
         itemCard.innerHTML = `
-            <img src=${item.image_url} height="200" width="200">
+            <img src=${item.image_url} height="300" width="300">
             <h2>${item.item_name}</h2>
         `;
         if (item.lost_status === true) {
@@ -41,23 +41,28 @@ function renderItems(jsonItems) {
 
         renderComments(itemCard, item.comments)
         itemCard.addEventListener("mouseenter", function() {
-            console.log(`You have entered ${item.item_name} - ${item.id}`);
-            //fetchItems(`http://localhost:3000/items/${item.id}`, renderItemShow) - CAN I JUST USE THE DATA I HAVE ALREADY FETCHED?
+            const commentsContainer = itemCard.querySelector(".comments-container");
+            commentsContainer.classList.remove("hidden");
+        })
+        itemCard.addEventListener("mouseleave", function() {
+            const commentsContainer = itemCard.querySelector(".comments-container");
+            commentsContainer.classList.add("hidden");
         })
     }
 }
 
 
 function renderComments(itemCard, commentsArray) {
-    let commentContainer = document.createElement("div");
-    commentContainer.classList.add("comments-container", "hidden");
+    let commentsContainer = document.createElement("div");
+    commentsContainer.classList.add("comments-container", "hidden");
+    itemCard.appendChild(commentsContainer);
     for (comment of commentsArray) {
         const commenterAndDate = document.createElement("p");
         commenterAndDate.innerHTML = `${comment.commenters_name} <em>at ${readableDateTime(comment.created_at)}</em>`;
         console.log(comment.created_at);
         const content = document.createElement("p");
         content.innerHTML = comment.content;
-        itemCard.append(commenterAndDate, content);
+        commentsContainer.append(commenterAndDate, content);
     }
 }
 

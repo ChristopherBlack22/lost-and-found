@@ -4,8 +4,10 @@ body {
 
 #title {
     font-family: "Courier New", Courier, monospace;
-    text-shadow: 3.5px 3.5px rgb(80, 80, 80);
+    text-shadow: 4.5px 4.5px rgb(80, 80, 80);
     font-size: 60px;
+    top: 0;
+    text-align: center;  
 } 
 
 #title #lost {
@@ -17,6 +19,77 @@ body {
     color: rgb(16, 245, 8);
     font-size: 75px;
 } 
+
+#new-item-form-header {
+    text-align: center;
+    font-size: 30px;
+    font-family: "Courier New", Courier, monospace;
+    border: 5px dotted rgb(80, 80, 80);
+    background-color: rgb(60, 155, 160);
+    width: 600px;
+    margin: 0 auto;
+}
+
+
+
+
+#lost-item-container {
+    background-color: rgb(251, 251, 252);
+    width: 400px;
+    margin: 50px 50px 50px 200px;
+    position: relative;
+}
+
+#lost-item-container h3 {
+    font-family: "Courier New", Courier, monospace;
+    position: relative;
+    top: -270px;
+    color: rgb(255, 0, 0);
+    text-shadow: 3.5px 3.5px rgb(35, 35, 35);
+    font-size: 50px;
+    text-align: center;
+    transform: rotate(-15deg);
+}
+
+#lost-item-container .item {
+    border: 3px solid rgb(255, 0, 0);
+    margin: 50px 50px 50px 50px;
+    width: 350px;
+    height: 360px;
+}
+
+#found-item-container {
+    background-color: rgb(255, 255, 255);
+    width: 400px;
+    margin: 50px 200px 50px 50px;
+    position: relative;
+    left: 700px;
+    top: -2500px;
+    border: 3px solid rgb(16, 245, 8);
+}
+
+#found-item-container h3 {
+    font-family: "Courier New", Courier, monospace;
+    position: relative;
+    top: -270px;
+    color: rgb(16, 245, 8);
+    text-shadow: 3.5px 3.5px rgb(35, 35, 35);
+    font-size: 50px;
+    text-align: center;
+    transform: rotate(-15deg);
+}
+
+
+
+
+img {
+    position: relative;
+    margin: 0 auto;
+}
+
+
+
+
 
 .hidden {
     visibility: hidden;
