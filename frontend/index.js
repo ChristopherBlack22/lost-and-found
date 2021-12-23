@@ -16,17 +16,18 @@ function fetchItems(targetUrl, callback) {
 //add catch error
 
 
-//DO I NEED TO ADD AN ID FOR EACH ITEM?
 function renderItems(jsonItems) {
     for(const item of jsonItems) {
         const lostItemContainer = document.getElementById("lost-item-container");
         const foundItemContainer = document.getElementById("found-item-container");
+
         let itemCard = document.createElement("div");
-        itemCard.classList.add("item", "comments-hidden");
+        itemCard.classList.add("item", "unselected");
         itemCard.innerHTML = `
             <img src=${item.image_url} height="300" width="300">
-            <h2>${item.item_name}</h2>
+            <h2>${item.item_name}</h2>          
         `;
+
         if (item.lost_status === true) {
             let status = document.createElement("h3");
             status.innerHTML = "LOST!";
@@ -39,18 +40,28 @@ function renderItems(jsonItems) {
             foundItemContainer.appendChild(itemCard)
         }
 
+        let itemShowContainer = document.createElement("div");
+        itemShowContainer.classList.add("hidden");
+        itemShowContainer.innerHTML = `
+            <p id="item-desc" >${item.description}</p>
+            <p id="item-report-dets >Last seen at ${readableDateTime(item.last_seen_date)} by ${item.posters_name} - ${item.last_known_location}</p>
+        `;        
+        itemCard.appendChild(itemShowContainer);
+
         renderComments(itemCard, item.comments)
         itemCard.addEventListener("mouseenter", function() {
             const commentsContainer = itemCard.querySelector(".comments-container");
+            itemShowContainer.classList.remove("hidden");
             commentsContainer.classList.remove("hidden");
-            itemCard.classList.remove("comments-hidden")
-            itemCard.classList.add("comments-showing")
+            itemCard.classList.remove("unselected")
+            itemCard.classList.add("selected")
         })
         itemCard.addEventListener("mouseleave", function() {
             const commentsContainer = itemCard.querySelector(".comments-container");
+            itemShowContainer.classList.add("hidden");
             commentsContainer.classList.add("hidden");
-            itemCard.classList.remove("comments-showing")
-            itemCard.classList.add("comments-hidden")
+            itemCard.classList.remove("selected")
+            itemCard.classList.add("unselected")
         })
     }
 }
@@ -67,6 +78,9 @@ function renderComments(itemCard, commentsArray) {
         content.innerHTML = comment.content;
         commentsContainer.append(commenterAndDate, content);
     }
+    //let newCommentFormHeader = document.createElement("p");
+    //newCommentFormHeader.innerHTML = "Add a comment";
+    //newCommentFormHeader.addEventListener("click", function() {})
 }
 
 function readableDateTime(dateTime) {
