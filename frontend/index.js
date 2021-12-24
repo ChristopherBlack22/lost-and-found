@@ -2,10 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchItems("http://localhost:3000/items", renderItems);
     const newItemFormHeader = document.getElementById("new-item-form-header");
     newItemFormHeader.addEventListener("click", function() {
-        renderNewItemForm()
+        if (document.getElementById("item-form") === null) {
+            renderNewItemForm()
+        } else {
+            document.getElementById("item-form").remove()
+        }
     })
 });
-
 
 
 function fetchItems(targetUrl, callback) {
@@ -21,66 +24,69 @@ function renderItems(jsonItems) {
         const lostItemContainer = document.getElementById("lost-item-container");
         const foundItemContainer = document.getElementById("found-item-container");
 
-        let itemCard = document.createElement("div");
-        itemCard.classList.add("item", "unselected");
+        const itemCard = document.createElement("div");
+        itemCard.classList.add("item-card");
         itemCard.innerHTML = `
             <img src=${item.image_url} height="300" width="300">
             <h2>${item.item_name}</h2>          
         `;
 
         if (item.lost_status === true) {
-            let status = document.createElement("h3");
+            const status = document.createElement("h3");
             status.innerHTML = "LOST!";
             itemCard.appendChild(status);
             lostItemContainer.appendChild(itemCard)
         } else if (item.found_status === true) {
-            let status = document.createElement("h3");
+            const status = document.createElement("h3");
             status.innerHTML = "FOUND!";
             itemCard.appendChild(status);
             foundItemContainer.appendChild(itemCard)
         }
 
-        let itemShowContainer = document.createElement("div");
+        const itemShowContainer = document.createElement("div");
         itemShowContainer.classList.add("hidden");
         itemShowContainer.innerHTML = `
             <p id="item-desc" >${item.description}</p>
-            <p id="item-report-dets >Last seen at ${readableDateTime(item.last_seen_date)} by ${item.posters_name} - ${item.last_known_location}</p>
+            <p id="item-report-dets" >Last seen at ${readableDateTime(item.last_seen_date)} by ${item.posters_name} - ${item.last_known_location}</p>
         `;        
         itemCard.appendChild(itemShowContainer);
 
         renderComments(itemCard, item.comments)
         itemCard.addEventListener("mouseenter", function() {
-            const commentsContainer = itemCard.querySelector(".comments-container");
+            const itemCommentsContainer = itemCard.querySelector(".item-comments-container");
             itemShowContainer.classList.remove("hidden");
-            commentsContainer.classList.remove("hidden");
-            itemCard.classList.remove("unselected")
+            itemCommentsContainer.classList.remove("hidden");
             itemCard.classList.add("selected")
         })
+
         itemCard.addEventListener("mouseleave", function() {
-            const commentsContainer = itemCard.querySelector(".comments-container");
+            const itemCommentsContainer = itemCard.querySelector(".item-comments-container");
             itemShowContainer.classList.add("hidden");
-            commentsContainer.classList.add("hidden");
+            itemCommentsContainer.classList.add("hidden");
             itemCard.classList.remove("selected")
-            itemCard.classList.add("unselected")
         })
     }
 }
 
 
 function renderComments(itemCard, commentsArray) {
-    let commentsContainer = document.createElement("div");
-    commentsContainer.classList.add("comments-container", "hidden");
-    itemCard.appendChild(commentsContainer);
+    const itemCommentsContainer = document.createElement("div");
+    itemCommentsContainer.classList.add("item-comments-container", "hidden");
+    itemCommentsContainer.innerHTML = "<h2>Comments</h2>";
+    itemCard.appendChild(itemCommentsContainer);
     for (comment of commentsArray) {
         const commenterAndDate = document.createElement("p");
         commenterAndDate.innerHTML = `${comment.commenters_name} <em>at ${readableDateTime(comment.created_at)}</em>`;
         const content = document.createElement("p");
         content.innerHTML = comment.content;
-        commentsContainer.append(commenterAndDate, content);
+        itemCommentsContainer.append(commenterAndDate, content);
     }
-    //let newCommentFormHeader = document.createElement("p");
-    //newCommentFormHeader.innerHTML = "Add a comment";
-    //newCommentFormHeader.addEventListener("click", function() {})
+    const newCommentFormContainer = document.createElement("div");
+    itemCommentsContainer.appendChild(newCommentFormContainer);
+    const newCommentFormHeader = document.createElement("h4");
+    newCommentFormHeader.innerHTML = "Comment on this item";
+    newCommentFormContainer.appendChild(newCommentFormHeader);
+    newCommentFormHeader.addEventListener("click", function() {})
 }
 
 function readableDateTime(dateTime) {
@@ -95,8 +101,8 @@ function readableDateTime(dateTime) {
 
 
 function renderNewItemForm() {
-    let formContainer = document.getElementById("new-item-form-container");
-    let itemForm = document.createElement("form");
+    const formContainer = document.getElementById("new-item-form-container");
+    const itemForm = document.createElement("form");
     itemForm.id = "item-form";
     itemForm.innerHTML = `
         <label for="item-name">Item</label>

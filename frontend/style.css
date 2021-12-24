@@ -15,7 +15,7 @@ body {
     font-size: 60px;
     text-align: center; 
     /*position: sticky;*/
-    /*z-index: 1;*/
+    /* z-index: 1; */
 } 
 
 #title #lost {
@@ -31,9 +31,10 @@ body {
 
 #new-item-form-container {
     border: 5px dotted rgb(80, 80, 80);
-    background-color: rgb(60, 155, 160);
+    background-color: rgba(60, 155, 160, 0.809);
     width: 600px;
     margin: auto;
+    /* z-index: 1; */
     /*position: sticky;
     top: 0;*/
 }
@@ -56,10 +57,15 @@ body {
     clear: both;
 }
 
-.item.unselected {
+
+.item-card {
     height: 350px;
     /* border-bottom: 2px red;
     background-color: red; */
+}
+
+.item-card.selected {
+
 }
 
 
