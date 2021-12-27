@@ -111,11 +111,11 @@ function renderNewItemForm() {
     itemForm.id = "item-form";
     itemForm.innerHTML = `
         <label for="item-name">Item:</label>
-        <input type="text" id="item-name" name="item-name" placeholder="What is it?">
+        <input type="text" id="item-name" name="item-name" ><br><br>
         <label for="image-url">Picture:</label> 
-        <input type="text" id="image-url" name="image-url" placeholder="Upload URL"><br><br>
+        <input type="text" id="image-url" name="image-url" placeholder="URL for picture"><br><br>
         <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4" cols="46" placeholder="Please provide more details about the item here"></textarea><br><br>
+        <textarea id="description" name="description" rows="4" cols="50" placeholder="Please provide more details about the item here"></textarea><br><br>
         <label for="status">Have you lost or found this item?</label>
         <input type="radio" id="lost" name="status">
         <label for="lost">Lost</label>
@@ -123,12 +123,12 @@ function renderNewItemForm() {
         <label for="found">Found</label>
         <br><br>
         <label for="last-known-location">Last known location:</label> 
-        <input type="text" id="last-known-location" name="last-known-location" placeholder="Where was it?"><br><br>
+        <input type="text" id="last-known-location" name="last-known-location" ><br><br>
         <label for="last-seen-date">Date:</label> 
         <input type="datetime-local" id="last-seen-date" name="last-seen-date">
         <br><br>
         <label for="posters-name">Reported by:</label>
-        <input type="text" id="posters-name" name="posters-name">
+        <input type="text" id="posters-name" name="posters-name" placeholder="Your name please">
         <input type="submit" id="item-form-submit" value="Post Report">
     `;
     formContainer.appendChild(itemForm);
