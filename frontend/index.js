@@ -61,7 +61,7 @@ function postFormData(targetUrl, formData, callback) {
 	})
 	.then(response => response.json())
 	.then(json => callback(json))
-    .catch(error => console.log(error))	
+    //.catch(error => console.log(error.message))	
 }
 
 

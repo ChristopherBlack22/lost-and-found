@@ -9,10 +9,10 @@ class Comment {
     }
 
     get readableCreatedAt() {
-        const dateTimeArray = this.createdAt.split("T");
-        const formattedDate = dateTimeArray[0].split("-").reverse().join("/");
-        const formattedTime = dateTimeArray[1].slice(0,5);
-        const formattedDateTime = `${formattedTime} on ${formattedDate}`;
+        const time = this.createdAt.slice(11, 16);
+        const date = this.createdAt.slice(0, 10);
+        const formattedDate = date.split("-").reverse().join("/");
+        const formattedDateTime = `${time} on ${formattedDate}`;
         return formattedDateTime
     }
 
