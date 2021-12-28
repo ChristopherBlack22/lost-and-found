@@ -42,7 +42,8 @@ body {
 #new-item-form-header {
     text-align: center;
     font-size: 30px;
-    font-family: "Courier New", Courier, monospace;    
+    font-family: "Courier New", Courier, monospace;
+    cursor: pointer;  
 }
 
 form {
@@ -61,6 +62,7 @@ input[type=submit] {
 
 #item-form #item-name, #item-form #image-url, #item-form #last-known-location {
     width: 52%; 
+    font-family: "Courier New", Courier, monospace;
 }
 
 #item-form label {
@@ -156,4 +158,8 @@ img {
 
 .item-comments-container {
     background-color: rgb(69, 168, 173);
+}
+
+.new-comment-form-container h4 {
+    cursor: pointer;
 }

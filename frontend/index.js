@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     fetchItems("http://localhost:3000/items", renderItems);
+     
     const newItemFormHeader = document.getElementById("new-item-form-header");
     newItemFormHeader.addEventListener("click", function() {
         if (document.getElementById("item-form") === null) {
@@ -18,92 +19,49 @@ function fetchItems(targetUrl, callback) {
 }
 //add catch error
 
-
 function renderItems(jsonItems) {
-    for(const item of jsonItems) {
-        const lostItemContainer = document.getElementById("lost-item-container");
-        const foundItemContainer = document.getElementById("found-item-container");
+    const lostItemContainer = document.getElementById("lost-item-container");
+    const foundItemContainer = document.getElementById("found-item-container");
+    
+    for (const item of jsonItems) {
+        const newItem = new Item(item);
+        const newItemCard = newItem.createItemCard();
 
-        const itemCard = document.createElement("div");
-        itemCard.classList.add("item-card");
-        itemCard.innerHTML = `
-            <img src=${item.image_url} height="300" width="300">
-            <h2>${item.item_name}</h2>          
-        `;
-
-        if (item.lost_status === true) {
-            const status = document.createElement("h3");
-            status.innerHTML = "LOST!";
-            itemCard.appendChild(status);
-            lostItemContainer.appendChild(itemCard)
-        } else if (item.found_status === true) {
-            const status = document.createElement("h3");
-            status.innerHTML = "FOUND!";
-            itemCard.appendChild(status);
-            foundItemContainer.appendChild(itemCard)
+        if (newItem.status === "LOST!") {
+            lostItemContainer.appendChild(newItemCard)
+        } else if (newItem.status === "FOUND!") {
+            foundItemContainer.appendChild(newItemCard)
         }
 
-        const itemShowContainer = document.createElement("div");
-        itemShowContainer.classList.add("item-show-container", "hidden");
-        itemShowContainer.innerHTML = `
-            <p id="item-desc" >${item.description}</p>
-            <p id="item-report-dets" >Last seen at ${readableDateTime(item.last_seen_date)} by ${item.posters_name} - ${item.last_known_location}</p>
-        `;        
-        itemCard.appendChild(itemShowContainer);
+        renderComments(newItem.comments);
+    }
+}
 
-        const itemCommentsContainer = document.createElement("div");
-        itemCommentsContainer.classList.add("item-comments-container");
-        itemShowContainer.appendChild(itemCommentsContainer);
-        renderComments(itemCommentsContainer, item.comments)
-
-        itemCard.addEventListener("mouseenter", function() {
-            itemShowContainer.classList.remove("hidden");
-            itemCard.classList.add("selected")
-        })
-
-        itemCard.addEventListener("mouseleave", function() {            
-            itemShowContainer.classList.add("hidden");
-            itemCard.classList.remove("selected")
-        })
+function renderComments(jsonComments) {
+    for (const comment of jsonComments) {
+        const newComment = new Comment(comment);
+        const newCommentCard = newComment.createCommentCard();
+        const targetContainer = document.querySelector(`#item-${newComment.itemId}-comments`);
+        targetContainer.appendChild(newCommentCard);
     }
 }
 
 
-function renderComments(itemCommentsContainer, commentsArray) {
-    itemCommentsContainer.innerHTML = "<h4>Comments</h4>";
-    for (comment of commentsArray) {
-        const commenterAndDate = document.createElement("p");
-        commenterAndDate.innerHTML = `${comment.commenters_name} <em>at ${readableDateTime(comment.created_at)}</em>`;
-        const content = document.createElement("p");
-        content.innerHTML = comment.content;
-        itemCommentsContainer.append(commenterAndDate, content);
-    }
-    const newCommentFormContainer = document.createElement("div");
-    newCommentFormContainer.id = "new-comment-form-container";
-    itemCommentsContainer.appendChild(newCommentFormContainer);
-    const newCommentFormHeader = document.createElement("h4");
-    newCommentFormHeader.innerHTML = "Click to add a comment";
-    newCommentFormContainer.appendChild(newCommentFormHeader);
-    newCommentFormHeader.addEventListener("click", function() {
-        if (document.getElementById("comment-form") === null) {
-        const itemId = commentsArray[0].item_id;
-        renderNewCommentForm(newCommentFormContainer, itemId)
-        } else {
-            document.getElementById("comment-form").remove()
-        }
-    })
+//dealing with forms
+
+function postFormData(targetUrl, formData, callback) {
+	fetch(targetUrl, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+            		"Accept": "application/json"
+		},
+		body: JSON.stringify(formData)
+	})
+	.then(response => response.json())
+	.then(json => callback(json))	
 }
-
-
-
-function readableDateTime(dateTime) {
-    const dateTimeArray = dateTime.split("T");
-    const formattedDate = dateTimeArray[0].split("-").reverse().join("/");
-    const formattedTime = dateTimeArray[1].slice(0,5);
-    const formattedDateTime = `${formattedTime} on ${formattedDate}`;
-    return formattedDateTime;
-}
-
+// add .catch?
 
 function renderNewItemForm() {
     const formContainer = document.getElementById("new-item-form-container");
@@ -128,10 +86,11 @@ function renderNewItemForm() {
         <input type="datetime-local" id="last-seen-date" name="last-seen-date">
         <br><br>
         <label for="posters-name">Reported by:</label>
-        <input type="text" id="posters-name" name="posters-name" placeholder="Your name please">
+        <input type="text" id="posters-name" name="posters-name" >
         <input type="submit" id="item-form-submit" value="Post Report">
     `;
     formContainer.appendChild(itemForm);
+
     itemForm.addEventListener("submit", function(event) {
         handleNewItemFormSubmit(event);
         formContainer.removeChild(itemForm)   
@@ -149,23 +108,11 @@ function handleNewItemFormSubmit(event) {
     const lastSeenDate = document.querySelector("#item-form #last-seen-date").value;
     const postersName = document.querySelector("#item-form #posters-name").value;
     const formData = {item_name: itemName, description: description, image_url: imageUrl, lost_status: lostStatus, found_status: foundStatus, last_know_location: lastKnownLocation, last_seen_date: lastSeenDate, posters_name: postersName};
-    postNewItem(formData);    
+    postFormData("http://localhost:3000/items", formData, renderItems)
 }
 
-function postNewItem(formData) {
-    fetch("http://localhost:3000/items", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(jsonItems => renderItems(jsonItems))
-}
-
-function renderNewCommentForm(newCommentFormContainer, itemId) {
+function renderNewCommentForm(itemId) {
+    const targetContainer = document.querySelector(`#item-${itemId}-comments`);
     const commentForm = document.createElement("form");
     commentForm.id = "comment-form";
     commentForm.innerHTML = `
@@ -175,9 +122,11 @@ function renderNewCommentForm(newCommentFormContainer, itemId) {
         <input type="hidden" id="item-id" name="item-id" value="${itemId}">
         <input type="submit" id="comment-form-submit" value="Post comment">
     `;
-    newCommentFormContainer.appendChild(commentForm);
+    targetContainer.appendChild(commentForm);
+
     commentForm.addEventListener("submit", function(event){
-        handleNewCommentFormSubmit(event)
+        handleNewCommentFormSubmit(event);
+        targetContainer.removeChild(commentForm)
     })
 }
 
@@ -187,32 +136,5 @@ function handleNewCommentFormSubmit(event) {
     const content = document.querySelector("#comment-form #content").value;
     const itemId = document.querySelector("#comment-form #item-id").value;
     const formData = {commenters_name: commentersName, content: content, item_id: itemId};
-    postNewComment(formData);    
+    postFormData("http://localhost:3000/comments", formData, renderComments)
 }
-
-function postNewComment(formData) {
-    fetch("http://localhost:3000/comments", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    //.then(jsonItems => renderComments(jsonItems))
-}
-
-//for this to work
-//1 - renderComments usually takes in the itemShow Container to which it will populate with comments, how to get round this?
-//2 - jsonItems needs to become jsonComments and the serialised data from the API needs to match that which comes from the Item fetch
-//3 - backend routes and actions and serialiser need completing
-//4 - remderComments need refactoring as it creates a whole comments container first (create the hook elements first and then call function to populate it)
-// "comments": [
-//     {
-//       "id": 1,
-//       "commenters_name": "Mouse",
-//       "content": "They look like my boots but I'm not sure they're missing. I'll check.",
-//       "item_id": 1,
-//       "created_at": "2021-12-20T23:49:12.400Z"
-//     },
