@@ -20,6 +20,7 @@ function fetchItems(targetUrl, callback) {
 //add catch error
 
 function renderItems(jsonItems) {
+    //debugger
     const lostItemContainer = document.getElementById("lost-item-container");
     const foundItemContainer = document.getElementById("found-item-container");
     
@@ -59,9 +60,10 @@ function postFormData(targetUrl, formData, callback) {
 		body: JSON.stringify(formData)
 	})
 	.then(response => response.json())
-	.then(json => callback(json))	
+	.then(json => callback(json))
+    .catch(error => console.log(error))	
 }
-// add .catch?
+
 
 function renderNewItemForm() {
     const formContainer = document.getElementById("new-item-form-container");
