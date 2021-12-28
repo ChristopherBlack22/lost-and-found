@@ -107,7 +107,7 @@ function handleNewItemFormSubmit(event) {
     const lastKnownLocation = document.querySelector("#item-form #last-known-location").value;
     const lastSeenDate = document.querySelector("#item-form #last-seen-date").value;
     const postersName = document.querySelector("#item-form #posters-name").value;
-    const formData = {item_name: itemName, description: description, image_url: imageUrl, lost_status: lostStatus, found_status: foundStatus, last_know_location: lastKnownLocation, last_seen_date: lastSeenDate, posters_name: postersName};
+    const formData = {item_name: itemName, description: description, image_url: imageUrl, lost_status: lostStatus, found_status: foundStatus, last_known_location: lastKnownLocation, last_seen_date: lastSeenDate, posters_name: postersName};
     postFormData("http://localhost:3000/items", formData, renderItems)
 }
 
