@@ -44,7 +44,7 @@ class Item {
         itemShowContainer.classList.add("item-show-container", "hidden");
         itemShowContainer.innerHTML = `
             <p id="item-desc" >${this.description}</p>
-            <p id="item-report-dets" >Last seen at ${this.readableLastSeenDate} by ${this.postersName} - ${this.lastKnownLocation}</p>
+            <p id="item-report-dets" ><strong>Last seen at ${this.readableLastSeenDate} by ${this.postersName}</strong> - ${this.lastKnownLocation}</p>
         `;        
         itemCard.appendChild(itemShowContainer);
 

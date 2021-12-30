@@ -9,8 +9,8 @@ class ItemsController < ApplicationController
         item = Item.new(item_params)
         if item.save
             render json: ItemSerializer.new([item]).to_serialized_json
-        else
-            render json: item.errors.full_messages
+        # else
+        #     render json: item.errors.full_messages
         end 
     end
 

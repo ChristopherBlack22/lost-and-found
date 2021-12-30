@@ -17,10 +17,8 @@ function fetchItems(targetUrl, callback) {
     .then(response => response.json())
     .then(json => callback(json))
 }
-//add catch error
 
 function renderItems(jsonItems) {
-    //debugger
     const lostItemContainer = document.getElementById("lost-item-container");
     const foundItemContainer = document.getElementById("found-item-container");
     
@@ -43,7 +41,8 @@ function renderComments(jsonComments) {
         const newComment = new Comment(comment);
         const newCommentCard = newComment.createCommentCard();
         const targetContainer = document.querySelector(`#item-${newComment.itemId}-comments`);
-        targetContainer.appendChild(newCommentCard);
+        const lastElement = targetContainer.lastChild;
+        targetContainer.insertBefore(newCommentCard, lastElement);
     }
 }
 
@@ -61,7 +60,6 @@ function postFormData(targetUrl, formData, callback) {
 	})
 	.then(response => response.json())
 	.then(json => callback(json))
-    //.catch(error => console.log(error.message))	
 }
 
 
@@ -71,11 +69,11 @@ function renderNewItemForm() {
     itemForm.id = "item-form";
     itemForm.innerHTML = `
         <label for="item-name">Item:</label>
-        <input type="text" id="item-name" name="item-name" ><br><br>
+        <input type="text" id="item-name" name="item-name" placeholder="*required" required><br><br>
         <label for="image-url">Picture:</label> 
-        <input type="text" id="image-url" name="image-url" placeholder="URL for picture"><br><br>
+        <input type="text" id="image-url" name="image-url" placeholder="*required - URL for picture" required><br><br>
         <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4" cols="50" placeholder="Please provide more details about the item here"></textarea><br><br>
+        <textarea id="description" name="description" rows="4" cols="50" placeholder="*required" required></textarea><br><br>
         <label for="status">Have you lost or found this item?</label>
         <input type="radio" id="lost" name="status">
         <label for="lost">Lost</label>
@@ -83,12 +81,12 @@ function renderNewItemForm() {
         <label for="found">Found</label>
         <br><br>
         <label for="last-known-location">Last known location:</label> 
-        <input type="text" id="last-known-location" name="last-known-location" ><br><br>
+        <input type="text" id="last-known-location" name="last-known-location" placeholder="*required" required><br><br>
         <label for="last-seen-date">Date:</label> 
-        <input type="datetime-local" id="last-seen-date" name="last-seen-date">
+        <input type="datetime-local" id="last-seen-date" name="last-seen-date" required>
         <br><br>
         <label for="posters-name">Reported by:</label>
-        <input type="text" id="posters-name" name="posters-name" >
+        <input type="text" id="posters-name" name="posters-name" placeholder="*required" required>
         <input type="submit" id="item-form-submit" value="Post Report">
     `;
     formContainer.appendChild(itemForm);
@@ -118,10 +116,11 @@ function renderNewCommentForm(itemId) {
     const commentForm = document.createElement("form");
     commentForm.id = "comment-form";
     commentForm.innerHTML = `
-        <label for="commenters-name">Your name</label>
-        <input type="text" id="commenters-name" name="commenters-name">
-        <input type="text" id="content" name="content">
-        <input type="hidden" id="item-id" name="item-id" value="${itemId}">
+        <label for="commenters-name">Name:</label>
+        <input type="text" id="commenters-name" name="commenters-name" placeholder="*required" required><br><br>
+        <label for="content" id="content-label">Comment:</label>
+        <textarea id="content" name="content" rows="5" cols="22" placeholder="*required" required></textarea>
+        <input type="hidden" id="item-id" name="item-id" value="${itemId}"><br>
         <input type="submit" id="comment-form-submit" value="Post comment">
     `;
     targetContainer.appendChild(commentForm);
